@@ -2,8 +2,8 @@
 import Web3 from "web3";
 import { getAccount } from "../../utils/utils.js";
 // contracts' abis and addresses
-import abi from "../contracts/abi.js";
-import address from "../contracts/address.js";
+import ContractAddress from "../contracts/address.js";
+import IdentityJson from "../../../../truffle/build/contracts/Identity.json";
 
 //initialise the provider
 let web3;
@@ -24,8 +24,8 @@ if (window.ethereum) {
 
 // Initialise contracts here
 const IdentityContract = new web3.eth.Contract(
-  abi.Identity,
-  address.IdentityAddress
+  IdentityJson.abi,
+  ContractAddress.IdentityAddress
 );
 
 // Get account
