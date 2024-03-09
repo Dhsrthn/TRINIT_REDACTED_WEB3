@@ -1,11 +1,12 @@
 const fs = require("fs");
 const Identity = artifacts.require("./Identity.sol");
+const Token = artifacts.require("./Token.sol");
 const configObjectRegex = /{[^]+}/;
 
 function parseJsonFromFile(data) {
   const configObject = data.match(configObjectRegex);
   if (!configObject) {
-    console.log("No config object found");
+    console.log("No config object found \n");
     return;
   }
   const JsonParsedConfig = configObject[0].replace(
@@ -30,7 +31,7 @@ async function updateAddress(address, contractName) {
       if (!addressConfig[contractName]) {
         addressConfig[contractName] = "";
         console.log(
-          "Contract not found in addressConfig, adding new contract address..."
+          "Contract not found in addressConfig, adding new contract address..." , " \n"
         );
       }
       addressConfig[contractName] = address;
@@ -51,7 +52,7 @@ async function updateAddress(address, contractName) {
           }
           console.log(
             `addressConfig file updated with ${contractName} `,
-            address
+            address , " \n"
           );
         }
       );
@@ -59,9 +60,25 @@ async function updateAddress(address, contractName) {
   );
 }
 
-module.exports = function (deployer) {
-  deployer.deploy(Identity).then(async () => {
-    console.log("Identity contract deployed at address ", Identity.address);
-    await updateAddress(Identity.address, "IdentityAddress");
+module.exports = async function (deployer) {
+  let tokenInstance;
+  let identityInstance;
+
+  await deployer.deploy(Token).then(async () => {
+    tokenInstance = await Token.deployed();
+    console.log("Tokens contract deployed at address ", tokenInstance.address, " \n");
+    await updateAddress(tokenInstance.address, "TokenAddress");
   });
+
+  await deployer.deploy(Identity, tokenInstance.address).then(async () => {
+    identityInstance = await Identity.deployed();
+    console.log(
+      "Identity contract deployed at address ",
+      identityInstance.address , " \n"
+    );
+    await updateAddress(identityInstance.address, "IdentityAddress");
+  });
+
+  await tokenInstance.addAllowedAddress(identityInstance.address);
+  console.log("Identity contract is now an allowed address in tokens contract \n");
 };

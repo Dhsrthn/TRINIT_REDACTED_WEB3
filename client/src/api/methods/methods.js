@@ -1,9 +1,10 @@
-// Methods that interacts with all the contracts
+// Methods that interacts with all the contracts go here
 import Web3 from "web3";
 import { getAccount } from "../../utils/utils.js";
-// contracts' abis and addresses
+// contracts' addresses and abis
 import ContractAddress from "../contracts/address.js";
 import IdentityJson from "../../../../truffle/build/contracts/Identity.json";
+import TokenJson from "../../../../truffle/build/contracts/Token.json";
 
 //initialise the provider
 let web3;
@@ -28,9 +29,16 @@ const IdentityContract = new web3.eth.Contract(
   ContractAddress.IdentityAddress
 );
 
+const TokenContract = new web3.eth.Contract(
+  TokenJson.abi,
+  ContractAddress.TokenAddress
+);
+
 // Get account
 const account = await getAccount();
+console.log(account);
 
+// Identity contract methods
 export async function signUp(name, email) {
   try {
     await IdentityContract.methods.setUser(name, email).send({ from: account });
@@ -42,5 +50,15 @@ export async function signUp(name, email) {
 
 export async function Login() {
   const returnObj = await IdentityContract.methods.getUser(account).call();
+  console.log(returnObj);
   return returnObj;
+}
+
+// Token contract methods
+export async function getTokens() {
+  return await TokenContract.methods.balanceOf(account).call();
+}
+
+export async function getStake() {
+  return await TokenContract.methods.getStakePercentage(account).call();
 }
