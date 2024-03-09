@@ -9,7 +9,6 @@ export function detectProvider() {
   } else {
     console.log("Non- ethereum browser detected.");
   }
-
   return provider;
 }
 
