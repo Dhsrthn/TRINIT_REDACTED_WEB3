@@ -93,7 +93,7 @@ module.exports = async function (deployer) {
     "Identity contract is now an allowed address in tokens contract \n"
   );
 
-  await deployer.deploy(Collab).then(async () => {
+  await deployer.deploy(Collab, identityInstance.address).then(async () => {
     collabInstance = await Collab.deployed();
     console.log("Collab contract deployed at address ", collabInstance.address, " \n");
     await updateAddress(collabInstance.address, "CollabAddress");

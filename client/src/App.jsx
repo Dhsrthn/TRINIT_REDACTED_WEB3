@@ -4,7 +4,7 @@ import Home from "./pages/Home.jsx";
 import Profile from "./pages/Profile.jsx";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import AgreementPage from "./pages/collab.jsx";
-import NotificationPage from "./pages/notif.jsx";
+// import NotificationPage from "./components/notif.jsx";
 import Feed from "./pages/Feed.jsx";
 import { MantineProvider } from '@mantine/core';
 
@@ -21,7 +21,7 @@ const App = () => {
           {/* <Route path="/test-upload" element={<Upload />} /> */}
           <Route path="/feed" element={<Feed />} />
           <Route path="/collab" element={<AgreementPage />} />
-          <Route path="/notif" element={<NotificationPage />} />
+          {/* <Route path="/notif" element={<NotificationPage />} /> */}
         </Routes>
       </div>
     </Router>

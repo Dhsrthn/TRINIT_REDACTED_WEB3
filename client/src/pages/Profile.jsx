@@ -1,12 +1,29 @@
 import Header from "../components/Header";
 import styles from "./styles.module.css";
 import Upload from "../components/upload";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { Login } from "../api/methods/methods";
 
 const Profile = () => {
-  const [name, setName] = useState("akhsaymnwdjkfwajfhd@gmail.com ");
+  const [name, setName] = useState(" ");
+  const [email, setEmail] = useState(" ");
   const [talents, setTalents] = useState(["drawing", "painting", "cooking"]);
   const [bio] = useState("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.");
+  
+  useEffect(() => {
+    async function fetchData() {
+      const returnObj = await Login();
+      console.log(returnObj)
+      if (returnObj[0] == "" && returnObj[1] == "") {
+        console.log("Not logged in");
+      }
+      else {
+        setName(returnObj[0]);
+        setEmail(returnObj[1]);
+      }
+    } fetchData();
+  }, []);
+  
   let arr = [{
     name: "John",
     description: "The best",
@@ -54,8 +71,8 @@ const Profile = () => {
             <div className=" flex items-center flex-col w-full h-[98%] rounded-lg bg-[#1f1e1e] p-20 gap-[8%]">
               <img src="/assets/logos_ethereum.svg" className=" rounded-[50%] w-[15vmin] h-[15vmin] border-[#C19E66] border p-6"></img>
               <div className=" flex flex-col items-center">
-              <p className=" font-archivo text-3xl">AKHSHAY</p>
-              <p className=" font-archivo font-extralight text-gray-400 text-2xl right-0">{`${name}`}</p>
+              <p className=" font-archivo text-3xl">{name.toUpperCase()}</p>
+              <p className=" font-archivo font-extralight text-gray-400 text-2xl right-0">{email}</p>
               </div>
               <div className=" w-full flex gap-10">
                 <div className=" w-[65%] text-justify flex flex-col items-center" >

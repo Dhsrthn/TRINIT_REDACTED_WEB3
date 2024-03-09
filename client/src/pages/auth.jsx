@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Login, signUp } from "../api/methods/methods";
 import Header from "../components/Header";
 import MultipleSelect from "../components/DropDown";
+import {useNavigate} from 'react-router-dom';
 
 const options = [
   "1",
@@ -21,6 +22,7 @@ const options = [
 ];
 
 const Auth = () => {
+  const navigate = useNavigate();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [isConnected, setIsConnected] = useState(false);
@@ -37,6 +39,7 @@ const Auth = () => {
         setIsSignedIn(false);
       } else {
         setIsSignedIn(true);
+        navigate('/profile')
         setName(returnObj[0]);
         setEmail(returnObj[1]);
       }
@@ -52,6 +55,7 @@ const Auth = () => {
     if (response[1]) {
       setMessage("Successfully signed up!");
       setIsSignedIn(true);
+      navigate('/profile')
     } else {
       alert("Signup failed!");
     }

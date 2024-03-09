@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import NotificationPage from "./notif";
 const Header = () => {
   const navigate = useNavigate();
   return (
@@ -29,15 +30,26 @@ const Header = () => {
         }}>
           PROFILE
         </span>
-        <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#ffe3b7]/[0.47] to-[#ffe3b7] hover:text-white hover:cursor-pointer">
+        <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#ffe3b7]/[0.47] to-[#ffe3b7] hover:text-white hover:cursor-pointer"
+        onClick={() => {
+          navigate("/collab");
+        }}>
           COLLOBORATIONS
         </span>
         <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#ffe3b7]/[0.47] to-[#ffe3b7] hover:text-white hover:cursor-pointer">
           DAO
         </span>
+        <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#ffe3b7]/[0.47] to-[#ffe3b7] hover:text-white hover:cursor-pointer">
+          <img src="/assets/notif.png" alt="" className="h-[2.5vmin]"
+          onClick={() => {
+            document.getElementById('notif').showModal();
+          }}></img>
+        </span>
       </div>
+      <NotificationPage />
     </div>
   );
 };
 
 export default Header;
+
