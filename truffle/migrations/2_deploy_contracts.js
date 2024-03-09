@@ -1,5 +1,6 @@
 const fs = require("fs");
 const Identity = artifacts.require("./Identity.sol");
+const Collab = artifacts.require("./Collab.sol");
 const Token = artifacts.require("./Token.sol");
 const configObjectRegex = /{[^]+}/;
 
@@ -31,7 +32,8 @@ async function updateAddress(address, contractName) {
       if (!addressConfig[contractName]) {
         addressConfig[contractName] = "";
         console.log(
-          "Contract not found in addressConfig, adding new contract address..." , " \n"
+          "Contract not found in addressConfig, adding new contract address...",
+          " \n"
         );
       }
       addressConfig[contractName] = address;
@@ -52,7 +54,8 @@ async function updateAddress(address, contractName) {
           }
           console.log(
             `addressConfig file updated with ${contractName} `,
-            address , " \n"
+            address,
+            " \n"
           );
         }
       );
@@ -63,10 +66,15 @@ async function updateAddress(address, contractName) {
 module.exports = async function (deployer) {
   let tokenInstance;
   let identityInstance;
+  let collabInstance;
 
   await deployer.deploy(Token).then(async () => {
     tokenInstance = await Token.deployed();
-    console.log("Tokens contract deployed at address ", tokenInstance.address, " \n");
+    console.log(
+      "Tokens contract deployed at address ",
+      tokenInstance.address,
+      " \n"
+    );
     await updateAddress(tokenInstance.address, "TokenAddress");
   });
 
@@ -74,11 +82,20 @@ module.exports = async function (deployer) {
     identityInstance = await Identity.deployed();
     console.log(
       "Identity contract deployed at address ",
-      identityInstance.address , " \n"
+      identityInstance.address,
+      " \n"
     );
     await updateAddress(identityInstance.address, "IdentityAddress");
   });
 
   await tokenInstance.addAllowedAddress(identityInstance.address);
-  console.log("Identity contract is now an allowed address in tokens contract \n");
+  console.log(
+    "Identity contract is now an allowed address in tokens contract \n"
+  );
+
+  await deployer.deploy(Collab).then(async () => {
+    collabInstance = await Collab.deployed();
+    console.log("Collab contract deployed at address ", collabInstance.address, " \n");
+    await updateAddress(collabInstance.address, "CollabAddress");
+  });
 };

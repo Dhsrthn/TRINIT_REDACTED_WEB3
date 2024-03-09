@@ -3,7 +3,10 @@ import Landing from "./pages/Landing.jsx";
 import Home from "./pages/Home.jsx";
 import Profile from "./pages/Profile.jsx";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import Upload from "./components/upload.jsx";
+import Upload from "./pages/upload.jsx";
+import AgreementPage from "./pages/collab.jsx";
+import NotificationPage from "./pages/notif.jsx";
+import "./App.css";
 
 const App = () => {
   return (
@@ -15,6 +18,8 @@ const App = () => {
           <Route path="/home" element={<Home />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/test-upload" element={<Upload />} />
+          <Route path="/collab" element={<AgreementPage />} />
+          <Route path="/notif" element={<NotificationPage />} />
         </Routes>
       </div>
     </Router>

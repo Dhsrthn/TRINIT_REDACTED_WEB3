@@ -5,7 +5,7 @@ import { getAccount } from "../../utils/utils.js";
 import ContractAddress from "../contracts/address.js";
 import IdentityJson from "../../../../truffle/build/contracts/Identity.json";
 import TokenJson from "../../../../truffle/build/contracts/Token.json";
-
+import CollabJson from "../../../../truffle/build/contracts/Collab.json";
 //initialise the provider
 let web3;
 if (window.ethereum) {
@@ -53,6 +53,61 @@ export async function Login() {
   console.log(returnObj);
   return returnObj;
 }
+
+const CollabContract = new web3.eth.Contract(
+  CollabJson.abi,
+  ContractAddress.CollabAddress
+);
+
+
+// Propose an agreement
+export async function proposeAgreement(terms, skillsRequired) {
+  try {
+    await CollabContract.methods.proposeAgreement(terms, skillsRequired).send({ from: account });
+    return [null, true];
+  } catch (error) {
+    return [error, false];
+  }
+}
+
+// Request collaboration
+export async function requestCollaboration(agreementId, user, skills) {
+  try {
+    await CollabContract.methods.requestCollaboration(agreementId, user, skills).send({ from: account });
+    return [null, true];
+  } catch (error) {
+    return [error, false];
+  }
+}
+
+// Approve collaborator
+export async function approveCollaborator(agreementId) {
+  try {
+    await CollabContract.methods.approveCollaborator(agreementId).send({ from: account });
+    return [null, true];
+  } catch (error) {
+    return [error, false];
+  }
+}
+
+// Get all proposed agreements
+export async function getAllProposedAgreements() {
+  const result = await CollabContract.methods.getAllProposedAgreements().call();
+  return result;
+}
+
+// Get user's collaborations
+export async function getMyCollaborations() {
+  const result = await CollabContract.methods.getMyCollaborations().call({ from: account });
+  return result;
+}
+
+// Get user's pending agreements
+export async function getPendingAgreements() {
+  const result = await CollabContract.methods.getPendingAgreements().call({ from: account });
+  return result;
+}
+
 
 // Token contract methods
 export async function getTokens() {
