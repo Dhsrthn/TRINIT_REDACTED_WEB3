@@ -1,6 +1,7 @@
 const address = {
-  "IdentityAddress": "0x123F58ed0fa347Fc14fA0Def1A1F47aE16Bb34bc",
-  "CollabAddress": "0xD03373dD90c0f09aB46b3dC5f16C3B59E2347B5d"
+  "IdentityAddress": "0x648bE652503005CcC3D61451098B673Ad883eE83",
+  "CollabAddress": "0x09Ee239C4d14BBb9094d4Fa16d1bE53f7Da47D5F",
+  "TokenAddress": "0x4De55c35d12a32fa82B51855D8dC9e0f390002b6"
 };
 
 export default address;

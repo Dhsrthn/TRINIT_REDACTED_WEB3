@@ -7,6 +7,9 @@ import Upload from "./pages/upload.jsx";
 import AgreementPage from "./pages/collab.jsx";
 import NotificationPage from "./pages/notif.jsx";
 import "./App.css";
+import Feed from "./pages/Feed.jsx";
+import { BrowserRouter as Router, Route, Routes, useNavigate } from "react-router-dom";
+import { MantineProvider } from '@mantine/core';
 
 const App = () => {
   return (
@@ -18,6 +21,7 @@ const App = () => {
           <Route path="/home" element={<Home />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/test-upload" element={<Upload />} />
+          <Route path="/feed" element={<Feed />} />
           <Route path="/collab" element={<AgreementPage />} />
           <Route path="/notif" element={<NotificationPage />} />
         </Routes>

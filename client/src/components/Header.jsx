@@ -14,20 +14,23 @@ const Header = () => {
         </span>
       </div>
       <div className="w-1/6 portrait:hidden"></div>
-      <div className="w-1/3 text-xl portrait:text-[0.7rem] flex justify-around font-normal text-right font-archivo  portrait:w-3/5">
+      <div className="w-2/4 text-xl portrait:text-[0.7rem] flex justify-around font-normal text-right font-archivo  portrait:w-3/5">
         <span
           className="bg-clip-text text-transparent bg-gradient-to-r from-[#ffe3b7]/[0.47] to-[#ffe3b7] hover:text-white hover:cursor-pointer"
           onClick={() => {
-            navigate("/home");
+            navigate("/feed");
           }}
         >
-          Feed
+          FEED
+        </span>
+        <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#ffe3b7]/[0.47] to-[#ffe3b7] hover:text-white hover:cursor-pointer"
+        onClick={() => {
+          navigate("/profile");
+        }}>
+          PROFILE
         </span>
         <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#ffe3b7]/[0.47] to-[#ffe3b7] hover:text-white hover:cursor-pointer">
-          Profile
-        </span>
-        <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#ffe3b7]/[0.47] to-[#ffe3b7] hover:text-white hover:cursor-pointer">
-          Colloborations
+          COLLOBORATIONS
         </span>
         <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#ffe3b7]/[0.47] to-[#ffe3b7] hover:text-white hover:cursor-pointer">
           DAO

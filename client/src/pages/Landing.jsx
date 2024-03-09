@@ -14,20 +14,20 @@ const Landing = () => {
         <Header />
       </div>
       <div className="h-[90%] w-full flex flex-col justify-around items-center text-center">
-        <div className="h-[60%] w-full flex flex-col justify-around portrait:h-[50%]">
-          <span className="text-9xl portrait:text-4xl">
-            <Typewriter text="CONNECT WITH PEOPLE" />
+        <div className="h-[60%] w-full flex flex-col justify-around items-center portrait:h-[50%]">
+          <span className="text-8xl portrait:text-4xl">
+            <Typewriter text="CONNECT WITH TALENTS" />
           </span>
-          <div className="flex w-full justify-around items-center mb-12 text-4xl font-archivo font-semibold portrait:text-lg ">
+          <div className="flex w-[60%] justify-around items-center mb-12 text-4xl font-archivo font-semibold portrait:text-lg ">
             <button
-              className="h-24 w-[25%] border-4 rounded-3xl border-[#C19E66] hover:bg-[#c19e66] hover:text-black portrait:w-[45%] portrait:h-12 "
+              className="h-20 w-[30%] border-2 transition-all duration-500 rounded-xl border-[#C19E66] hover:bg-[#c19e66] hover:text-black portrait:w-[45%] portrait:h-12 "
               onClick={() => {
                 navigate("/auth");
               }}
             >
               LOGIN
             </button>
-            <button className="h-24 w-[25%] border-4 rounded-3xl border-[#C19E66] hover:bg-[#c19e66] hover:text-black portrait:w-[45%] portrait:h-12">
+            <button className="h-20 w-[30%] border-2 transition-all duration-400 rounded-xl border-[#C19E66] hover:bg-[#c19e66] hover:text-black portrait:w-[45%] portrait:h-12">
               GET STARTED
             </button>
           </div>
