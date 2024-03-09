@@ -18,6 +18,7 @@ export async function getAccount() {
     await currentProvider.request({ method: "eth_requestAccounts" });
     const web3 = new Web3(currentProvider);
     const userAccounts = await web3.eth.getAccounts();
+    console.log(userAccounts);
     // maybe add a fucntionality to let the user choose the account
     return userAccounts[0];
   }
