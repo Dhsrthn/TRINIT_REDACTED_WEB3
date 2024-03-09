@@ -1,5 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
+import "./Identity.sol";
+
 
 contract Collab {
     struct ProposedAgreement {
@@ -18,6 +20,14 @@ contract Collab {
         string skillsRequired;
     }
 
+    address public IdentityContract;
+    Identity public Identities;
+
+    constructor(address _IdentityContract) {
+        IdentityContract = _IdentityContract;
+        Identities = Identity(IdentityContract);
+    }
+    
     ProposedAgreement[] public proposedAgreements;
     Collaboration[] public collaborations;
 
