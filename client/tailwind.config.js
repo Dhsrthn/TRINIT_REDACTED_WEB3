@@ -1,9 +1,17 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: ["./src/**/*.{html,js}"],
+  important: true,
+  content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        clashDisplay: ["clash-display", "sans-serif"],
+        archivo: ["Archivo", "sans-serif"],
+      },
+    },
   },
-  plugins: [],
-}
-
+  plugins: [import("daisyui")],
+  daisyui: {
+    themes: ["light", "dark"],
+  },
+};
