@@ -56,6 +56,8 @@ function NotificationPage() {
                         <div key={index}>
                             <p>Party 1 : {collab.party1}</p>
                             <p>Party 2 : {collab.party2}</p>
+                            <p>Party 1 Address : {collab.p1}</p>
+                            <p>Party 2 Address : {collab.p2}</p>
                             <p>Terms : {collab.terms}</p>
                             <p>Skill : {collab.skillsRequired}</p>
                             <div className="h-[2px] bg-[#C19E66] mt-10 w-full"></div>

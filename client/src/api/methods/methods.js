@@ -60,7 +60,7 @@ const CollabContract = new web3.eth.Contract(
 );
 
 
-// Propose an agreement
+//Collab Functions
 export async function proposeAgreement(terms, skillsRequired, deadline) {
   try {
     await CollabContract.methods.proposeAgreement(terms, skillsRequired, deadline).send({ from: account });
@@ -70,7 +70,6 @@ export async function proposeAgreement(terms, skillsRequired, deadline) {
   }
 }
 
-// Request collaboration
 export async function requestCollaboration(agreementId, user, skills) {
   try {
     await CollabContract.methods.requestCollaboration(agreementId, user, skills).send({ from: account });
@@ -80,7 +79,7 @@ export async function requestCollaboration(agreementId, user, skills) {
   }
 }
 
-// Approve collaborator
+
 export async function approveCollaborator(agreementId) {
   try {
     await CollabContract.methods.approveCollaborator(agreementId).send({ from: account });
@@ -90,19 +89,18 @@ export async function approveCollaborator(agreementId) {
   }
 }
 
-// Get all proposed agreements
 export async function getAllProposedAgreements() {
   const result = await CollabContract.methods.getAllProposedAgreements().call();
   return result;
 }
 
-// Get user's collaborations
+
 export async function getMyCollaborations() {
   const result = await CollabContract.methods.getMyCollaborations().call({ from: account });
   return result;
 }
 
-// Get user's pending agreements
+
 export async function getPendingAgreements() {
   const result = await CollabContract.methods.getPendingAgreements().call({ from: account });
   return result;

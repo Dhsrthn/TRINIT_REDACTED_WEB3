@@ -62,8 +62,7 @@ contract Collab {
 
         Collaboration memory newCollaboration = Collaboration(proposedAgreement.creator, proposedAgreement.potentialCollaborator,proposedAgreement.creatorName, proposedAgreement.collaboratorName, proposedAgreement.terms, proposedAgreement.skillsRequired);
         collaborations.push(newCollaboration);
-
-        // Swap with last element and delete last element
+        
         uint256 lastIndex = proposedAgreements.length - 1;
         proposedAgreements[_agreementId] = proposedAgreements[lastIndex];
         proposedAgreements.pop();
