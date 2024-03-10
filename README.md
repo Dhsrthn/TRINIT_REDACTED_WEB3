@@ -6,6 +6,8 @@
 
 ![image](https://github.com/Dhsrthn/TRINIT_REDACTED_WEB3/assets/119474707/9346af9a-5a8d-4f70-a3e9-e304cfb25a53)
 
+[Drive link](https://drive.google.com/drive/folders/14Lg3NjacPTqbZQTAKRQwBpEkxWievox7?usp=sharing)
+
 
 To run the application in devleopment mode,
 
