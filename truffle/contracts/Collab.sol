@@ -6,16 +6,20 @@ import "./Identity.sol";
 contract Collab {
     struct ProposedAgreement {
         address creator;
-        uint256 deadline;
+        string creatorName;
+        string deadline;
         string terms;
         string skillsRequired;
         address potentialCollaborator;
+        string collaboratorName;
         string potentialCollabSkills;
     }
 
     struct Collaboration {
-        address party1;
-        address party2;
+        address p1;
+        address p2;
+        string party1;
+        string party2;
         string terms;
         string skillsRequired;
     }
@@ -35,15 +39,18 @@ contract Collab {
     event CollabRequestSent(uint256 indexed agreementId, address indexed potentialPartner);
     event AgreementApproved(uint256 indexed agreementId, address indexed party2);
 
-    function proposeAgreement(string memory _terms, string memory _skillsRequired) public {
-        proposedAgreements.push(ProposedAgreement(msg.sender, block.timestamp + 30 days, _terms, _skillsRequired, address(0),""));
+    function proposeAgreement(string memory _terms, string memory _skillsRequired, string memory _deadline) public {
+        (string memory name,,) = Identities.getUser(msg.sender);
+        proposedAgreements.push(ProposedAgreement(msg.sender,name,_deadline, _terms, _skillsRequired, address(0), "",""));
     }
 
     function requestCollaboration(uint256 _agreementId, address user, string memory _skills) public {
+        (string memory collabName,,) = Identities.getUser(msg.sender);
         ProposedAgreement storage proposedAgreement = proposedAgreements[_agreementId];
         require(proposedAgreement.creator != user, "Cannot collaborate on your own agreement");
         require(proposedAgreement.potentialCollaborator == address(0), "Collaboration request already pending");
         proposedAgreement.potentialCollaborator = user;
+        proposedAgreement.collaboratorName = collabName;
         proposedAgreement.potentialCollabSkills = _skills;
     }
 
@@ -53,9 +60,13 @@ contract Collab {
         require(proposedAgreement.creator == msg.sender, "Only the agreement creator can approve collaborators");
         require(proposedAgreement.potentialCollaborator != address(0), "No pending collaboration request");
 
-        Collaboration memory newCollaboration = Collaboration(proposedAgreement.creator, proposedAgreement.potentialCollaborator, proposedAgreement.terms, proposedAgreement.skillsRequired);
+        Collaboration memory newCollaboration = Collaboration(proposedAgreement.creator, proposedAgreement.potentialCollaborator,proposedAgreement.creatorName, proposedAgreement.collaboratorName, proposedAgreement.terms, proposedAgreement.skillsRequired);
         collaborations.push(newCollaboration);
-        delete proposedAgreements[_agreementId];
+
+        // Swap with last element and delete last element
+        uint256 lastIndex = proposedAgreements.length - 1;
+        proposedAgreements[_agreementId] = proposedAgreements[lastIndex];
+        proposedAgreements.pop();
     }
 
     function getAllProposedAgreements() public view returns (ProposedAgreement[] memory) {
@@ -85,7 +96,7 @@ contract Collab {
         Collaboration[] memory userCollaborations = new Collaboration[](collaborations.length);
         uint256 count = 0;
         for (uint256 i = 0; i < collaborations.length; i++) {
-            if (collaborations[i].party1 == msg.sender || collaborations[i].party2 == msg.sender) {
+            if (collaborations[i].p1 == msg.sender || collaborations[i].p2 == msg.sender) {
                 userCollaborations[count] = collaborations[i];
                 count++;
             }

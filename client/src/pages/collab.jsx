@@ -6,7 +6,8 @@ import { getAccount } from '../utils/utils';
 function AgreementPage() {
     const [terms, setTerms] = useState('');
     const [skillsRequired, setSkillsRequired] = useState('');
-    const [name, setName] = useState('Akhshay');
+    const [deadline, setDeadline] = useState('');
+    const [name, setName] = useState('');
     const [account, setAccount] = useState('');
     const [proposedAgreements, setProposedAgreements] = useState([]);
 
@@ -22,13 +23,14 @@ function AgreementPage() {
             const collabs = await getMyCollaborations();
             console.log(collabs);
             console.log(account);
+
             setAccount(account);
         }
         get();
     }, []);
 
     const handleProposeAgreement = async () => {
-        const [, success] = await proposeAgreement(terms, skillsRequired);
+        const [, success] = await proposeAgreement(terms, skillsRequired,deadline);
         if (success) {
             const result = await getAllProposedAgreements();
             setProposedAgreements(result);
@@ -44,7 +46,8 @@ function AgreementPage() {
             setProposedAgreements(result);
         }
     };
-
+    console.log(proposedAgreements);
+    console.log(deadline);
     return (
         <div className="font-clashDisplay font-bold h-screen w-full flex flex-col justify-center items-center bg-black text-white relative overflow-hidden transition-all duration-100 ease-in-out">
             <div className="h-[10%] w-full items-center justify-center flex p-1">
@@ -60,6 +63,8 @@ function AgreementPage() {
                         <input type="text" placeholder="Terms" value={terms} onChange={(e) => setTerms(e.target.value)} /><br /><br />
                         <label htmlFor="skillsRequired">Skills Required</label><br />
                         <input type="text" placeholder="Skills Required" value={skillsRequired} onChange={(e) => setSkillsRequired(e.target.value)} /><br /><br />
+                        <label htmlFor="deadline">Deadline</label><br />
+                        <input type="text" placeholder="Deadline" value={deadline} onChange={(e) => setDeadline(e.target.value)} /><br /><br />
                         <button onClick={handleProposeAgreement} className=' w-full text-2xl bg-black p-4 transition-all duration-200 hover:bg-[#C19E66]'>Create</button>
                     </div>
                 </div>
@@ -71,8 +76,9 @@ function AgreementPage() {
                             <>
                                 {proposedAgreements.map((agreement, index) => (
                                     <div key={index} className=' w-[80%] text-xl'>
+                                        <p><span className=' text-[#C19E66]'>CREATOR:</span> {agreement.creatorName}</p>
                                         <p><span className=' text-[#C19E66]'>TERMS :</span> {agreement.terms}</p>
-                                        <p><span className=' text-[#C19E66]'>DEADLINE :</span> {agreement.deadline.length ? agreement.deadline : "NIL"}</p>
+                                        <p><span className=' text-[#C19E66]'>DEADLINE :</span> {agreement.deadline}</p>
                                         <p><span className=' text-[#C19E66]'>SKILL :</span> {agreement.skillsRequired}</p>
                                         {account != agreement.creator ? (
                                             <button onClick={() => handleRequestCollab(index)} className=' bg-black w-full mt-4 p-2 hover:bg-[#C19E66] transition-all duration-200'>Request Collaboration</button>

@@ -37,6 +37,7 @@ function NotificationPage() {
                     <h2 className=' text-4xl text-[#C19E66]'>ACCEPT THESE COLLABS</h2><br />
                     {pendingAgreements.map((agreement, index) => (
                         <div key={index}>
+                            <p>Collaborator : {agreement.collaboratorName}</p>
                             <p>Terms : {agreement.terms}</p>
                             <p>Deadline : {agreement.deadline}</p>
                             <p>Skill : {agreement.skillsRequired}</p>

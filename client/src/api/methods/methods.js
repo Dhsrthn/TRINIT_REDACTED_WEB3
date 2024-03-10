@@ -61,9 +61,9 @@ const CollabContract = new web3.eth.Contract(
 
 
 // Propose an agreement
-export async function proposeAgreement(terms, skillsRequired) {
+export async function proposeAgreement(terms, skillsRequired, deadline) {
   try {
-    await CollabContract.methods.proposeAgreement(terms, skillsRequired).send({ from: account });
+    await CollabContract.methods.proposeAgreement(terms, skillsRequired, deadline).send({ from: account });
     return [null, true];
   } catch (error) {
     return [error, false];
