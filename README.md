@@ -1,5 +1,12 @@
 # Decentralized Talent-Connect
 
+![image](https://github.com/Dhsrthn/TRINIT_REDACTED_WEB3/assets/119474707/de3218c0-32b2-4bfb-af7a-f0063fb609f7)
+
+![image](https://github.com/Dhsrthn/TRINIT_REDACTED_WEB3/assets/119474707/6a0c21ba-1ba7-4c1a-a329-589ef35253c7)
+
+![image](https://github.com/Dhsrthn/TRINIT_REDACTED_WEB3/assets/119474707/9346af9a-5a8d-4f70-a3e9-e304cfb25a53)
+
+
 To run the application in devleopment mode,
 
 After cloning the repository
