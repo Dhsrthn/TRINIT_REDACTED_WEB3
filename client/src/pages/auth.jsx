@@ -1,45 +1,51 @@
-import { useState } from "react";
-import { Login, signUp } from "../api/methods/methods";
+import { useEffect, useState } from "react";
+import { Login, getAllowedTalents, signUp } from "../api/methods/methods";
 import Header from "../components/Header";
 import MultipleSelect from "../components/DropDown";
-import {useNavigate} from 'react-router-dom';
-
-const options = [
-  "1",
-  "2",
-  "2",
-  "3",
-  "2",
-  "2",
-  "2",
-  "2",
-  "4",
-  "2",
-  "2",
-  "2",
-  "2",
-  "2",
-];
+import { useNavigate } from "react-router-dom";
+import { getAccount } from "../utils/utils";
 
 const Auth = () => {
   const navigate = useNavigate();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [bio, setBio] = useState("");
   const [isConnected, setIsConnected] = useState(false);
   const [isSignedIn, setIsSignedIn] = useState(false);
   const [message, setMessage] = useState("");
 
   const [selected, setSelected] = useState([]);
+  const [allowedTalents, setAllowedTalents] = useState([]);
 
+  useEffect(() => {
+    console.log(selected);
+  }, [selected]);
+
+  useEffect(() => {
+    const fetchAllowedTalents = async () => {
+      try {
+        const talentData = await getAllowedTalents();
+        if (talentData.length > 0) {
+          setAllowedTalents(talentData);
+        }
+      } catch (error) {
+        console.error("Error fetching allowed talents:", error);
+      }
+    };
+
+    fetchAllowedTalents();
+  }, []);
   const onConnect = async () => {
     try {
       const returnObj = await Login();
-      // returnObj : [name, email]
+      // returnObj : [name, email, bio, talents]
       if (returnObj[0] == "" && returnObj[1] == "") {
         setIsSignedIn(false);
       } else {
         setIsSignedIn(true);
-        navigate('/profile')
+        const account= await getAccount();
+        console.log(account,"here")
+        navigate(`/profile/${account}`)
         setName(returnObj[0]);
         setEmail(returnObj[1]);
       }
@@ -50,12 +56,13 @@ const Auth = () => {
   };
 
   const handleSignup = async () => {
-    const response = await signUp(name, email);
+    const response = await signUp(name, email, bio, selected);
     // response : [error, statusBoolean]
     if (response[1]) {
       setMessage("Successfully signed up!");
       setIsSignedIn(true);
-      navigate('/profile')
+      const account= await getAccount();
+        navigate(`/profile/${account}`)
     } else {
       alert("Signup failed!");
     }
@@ -135,7 +142,10 @@ const Auth = () => {
                   <div className="flex flex-col w-[80%] h-full justify-around ">
                     <span className="font-archivo font-light">Talents</span>
                   </div>
-                  <MultipleSelect options={options} onChange={setSelected} />
+                  <MultipleSelect
+                    options={allowedTalents}
+                    onChange={setSelected}
+                  />
                 </div>
               </div>
               <div className="h-1/2 flex flex-col items-center justify-around z-50">
@@ -149,8 +159,10 @@ const Auth = () => {
                     id=""
                     cols="30"
                     rows="10"
+                    value={bio}
                     placeholder="Write about yourself shortly :)"
                     className="z-40  h-[60%] w-full p-2 rounded-xl bg-transparent text-white"
+                    onChange={(e) => setBio(e.target.value)}
                   ></textarea>
                 </div>
               </div>
@@ -177,4 +189,4 @@ const Auth = () => {
   );
 };
 
-export default Auth;
+export default Auth

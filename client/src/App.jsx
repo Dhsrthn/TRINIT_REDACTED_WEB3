@@ -17,7 +17,7 @@ const App = () => {
           <Route path="/" element={<Landing />} />
           <Route path="/auth" element={<Auth />} />
           <Route path="/home" element={<Home />} />
-          <Route path="/profile" element={<Profile />} />
+          <Route path="/profile/:id" element={<Profile />} />
           {/* <Route path="/test-upload" element={<Upload />} /> */}
           <Route path="/feed" element={<Feed />} />
           <Route path="/collab" element={<AgreementPage />} />

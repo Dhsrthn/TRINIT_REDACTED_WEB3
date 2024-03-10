@@ -37,33 +37,36 @@ function MultipleSelectDropdown({ options, onChange }) {
         Select Talents
       </button>
       {isOpen && (
-        <div className="dropdown-content absolute top-100 left-0 mt-10 w-[100%] z-50 max-h-full overflow-y-scroll">
-          {options.map((option) => (
-            <div
-              key={option}
-              className={`w-full flex items-center p-2 ${
-                selectedOptions.includes(option) && "bg-[#ffc05b]"
-              }`}
-            >
-              <input
-                type="checkbox"
-                id={option}
-                value={option}
-                checked={selectedOptions.includes(option)}
-                onChange={() => handleOptionToggle(option)}
-              />
-              <label htmlFor={option} className="ml-10">
-                {option}
-              </label>
-            </div>
-          ))}
+        <div className="absolute top-100 left-0 mt-10 w-[100%] z-50 max-h-[220%] overflow-y-scroll bg-gray-500  rounded-xl">
+          <div className="h-full w-full relative">
+            {options.map((option) => (
+              <div
+                key={option}
+                className={`w-full flex items-center p-2 ${
+                  selectedOptions.includes(option) && "bg-[#ffc05b]"
+                }`}
+              >
+                <input
+                  type="checkbox"
+                  id={option}
+                  value={option}
+                  checked={selectedOptions.includes(option)}
+                  onChange={() => handleOptionToggle(option)}
+                />
+                <label htmlFor={option} className="ml-10 text-lg">
+                  {option}
+                </label>
+              </div>
+            ))}
+          </div>
           <button
             onClick={handleApply}
-            className="text-center w-full hover:bg-[#ffc05b] mt-5"
+            className="text-center w-full hover:bg-[#ffc05b] mt-5 "
           >
             Apply
           </button>
         </div>
+        
       )}
     </div>
   );
@@ -74,4 +77,4 @@ MultipleSelectDropdown.propTypes = {
   onChange: PropTypes.func,
 };
 
-export default MultipleSelectDropdown;
+export default MultipleSelectDropdown

@@ -1,14 +1,13 @@
 import { useState } from 'react';
 import { NFTStorage } from 'nft.storage';
 import styles from './style.module.css';
+import { uploadToFeed } from '../api/methods/methods';
 
 const Upload = () => {
     const [file, setFile] = useState(null);
-    const [open, setOpen] = useState(false)
-
-
+    const [name, setName] = useState('');
+    const [desc, setDesc] = useState('');
     const handleUpload = () => {
-        setOpen(true)
         document.getElementById('upload').showModal();
     }
 
@@ -26,14 +25,12 @@ const Upload = () => {
                 console.error('No file selected');
                 return;
             }
-
-            const name = 'akhshay';
-            const description = 'the';
+            document.getElementById('kya').innerHTML = "UPLOADING...";
             const ipfs = new NFTStorage({ token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweDUyZjczMUI4QjA2N0UzMzBhNTRiQ0QwNDFGYjQ0NjU0OTExOTI0MzMiLCJpc3MiOiJuZnQtc3RvcmFnZSIsImlhdCI6MTcwOTk2NDAyMTkyMywibmFtZSI6IlRyaW5pdCJ9.s-v-trfgaUFk9m1exEBgVs8JxKfX7nfe3Hhfk_DeiYg" });
 
             const meta = await ipfs.store({
                 name,
-                description,
+                description:desc,
                 image: file,
             });
 
@@ -41,21 +38,25 @@ const Upload = () => {
 
             try {
                 const metadataResponse = await fetch(metadataURL);
-                // document.getElementById('upload').close();
-
+                
                 if (metadataResponse.ok) {
                     const metadata = await metadataResponse.json();
-                    console.log(metadata.image);
+                    
+                    await uploadToFeed(`https://cloudflare-ipfs.com/ipfs/${metadata.image.split("ipfs://")[1]}`, metadata.name, metadata.description).then((res) => {
+                        console.log(res);
+                        document.getElementById('upload').close();
+                    });
+                    // console.log(metadata.image);
 
-                    const imageUrl = `https://cloudflare-ipfs.com/ipfs/${metadata.image.split("ipfs://")[1]}`;
+                    // const imageUrl = `https://cloudflare-ipfs.com/ipfs/${metadata.image.split("ipfs://")[1]}`;
 
-                    const imgElement = document.createElement("img");
-                    imgElement.src = imageUrl;
-                    imgElement.alt = "Uploaded image";
-                    imgElement.style.width = '100px'
-                    imgElement.style.height = '100px'
+                    // const imgElement = document.createElement("img");
+                    // imgElement.src = imageUrl;
+                    // imgElement.alt = "Uploaded image";
+                    // imgElement.style.width = '100px'
+                    // imgElement.style.height = '100px'
 
-                    document.getElementById("mass").append(imgElement);
+                    // document.getElementById("mass").append(imgElement);
                 } else {
                     console.error('Failed to fetch metadata. Status:', metadataResponse.status);
                 }
@@ -70,21 +71,26 @@ const Upload = () => {
     return (
         <>
             <dialog id='upload' className="overflow-hidden rounded-2 z-10">
-                <div className=' absolute mt-0 ml-0 w-10 h-10 p-5 font-archivo font-bold text-3xl cursor-pointer' 
-                onClick={()=>{
-                    document.getElementById('upload').close();
-                }}>X</div>
+                <div className=' absolute mt-0 ml-0 w-10 h-10 p-5 font-archivo font-bold text-3xl cursor-pointer'
+                    onClick={() => {
+                        document.getElementById('upload').close();
+                    }}>X</div>
                 <div className="bg-black rounded-2 flex flex-col items-center justify-center">
-                    <div className="w-[420px] bg-white p-8 rounded-2xl flex flex-col gap-12 rounded-2">
+                    <div className="w-[420px] bg-white p-8 rounded-2xl flex flex-col gap-5 rounded-2">
                         <div className="text-center">
                             <p className="text-gray-600">Upload your file here</p>
                         </div>
+                        <label htmlFor="name">Name</label>
+                        <input type="text" placeholder="Name" value={name} onChange={(e) => setName(e.target.value)} />
+                        <label htmlFor="desc">Description</label>
+                        <input type="text" placeholder="Desc" value={desc} onChange={(e) => setDesc(e.target.value)} />
+                        {/* <label htmlFor="skillsRequired">Skills Required</label><br /> */}
                         <input
                             type="file"
                             className="w-full p-12 border-2 rounded-2xl text-xl cursor-pointer group flex flex-col items-center justify-center border-dashed border-[#c19e66] text-center"
                             onChange={handleFileChange}
                         />
-                        <button type="submit" className="bg-black h-[4.5vmin] text-2xl font-archivo rounded-md text-white" onClick={handleSubmit}>
+                        <button type="submit" id="kya" className="bg-black h-[4.5vmin] text-2xl font-archivo rounded-md text-white" onClick={handleSubmit}>
                             SUBMIT
                         </button>
 

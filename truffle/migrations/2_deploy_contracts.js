@@ -2,6 +2,7 @@ const fs = require("fs");
 const Identity = artifacts.require("./Identity.sol");
 const Collab = artifacts.require("./Collab.sol");
 const Token = artifacts.require("./Token.sol");
+const Feed = artifacts.require("./Feed.sol");
 const configObjectRegex = /{[^]+}/;
 
 function parseJsonFromFile(data) {
@@ -67,6 +68,7 @@ module.exports = async function (deployer) {
   let tokenInstance;
   let identityInstance;
   let collabInstance;
+  let feedInstance;
 
   await deployer.deploy(Token).then(async () => {
     tokenInstance = await Token.deployed();
@@ -95,7 +97,21 @@ module.exports = async function (deployer) {
 
   await deployer.deploy(Collab, identityInstance.address).then(async () => {
     collabInstance = await Collab.deployed();
-    console.log("Collab contract deployed at address ", collabInstance.address, " \n");
+    console.log(
+      "Collab contract deployed at address ",
+      collabInstance.address,
+      " \n"
+    );
     await updateAddress(collabInstance.address, "CollabAddress");
+  });
+
+  await deployer.deploy(Feed, identityInstance.address ).then(async () => {
+    feedInstance = await Feed.deployed();
+    console.log(
+      "Feed contract deployed at address ",
+      feedInstance.address,
+      " \n"
+    );
+    await updateAddress(feedInstance.address, "FeedAddress");
   });
 };

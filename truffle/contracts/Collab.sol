@@ -40,12 +40,12 @@ contract Collab {
     event AgreementApproved(uint256 indexed agreementId, address indexed party2);
 
     function proposeAgreement(string memory _terms, string memory _skillsRequired, string memory _deadline) public {
-        (string memory name,,) = Identities.getUser(msg.sender);
+        (string memory name,string memory collabEmail, string memory bio, string[] memory talents, uint256 tokens) = Identities.getUser(msg.sender);
         proposedAgreements.push(ProposedAgreement(msg.sender,name,_deadline, _terms, _skillsRequired, address(0), "",""));
     }
 
     function requestCollaboration(uint256 _agreementId, address user, string memory _skills) public {
-        (string memory collabName,,) = Identities.getUser(msg.sender);
+        (string memory collabName,string memory collabEmail, string memory bio, string[] memory talents, uint256 tokens) = Identities.getUser(msg.sender);
         ProposedAgreement storage proposedAgreement = proposedAgreements[_agreementId];
         require(proposedAgreement.creator != user, "Cannot collaborate on your own agreement");
         require(proposedAgreement.potentialCollaborator == address(0), "Collaboration request already pending");
@@ -123,5 +123,3 @@ contract Collab {
         return filteredAgreements2;
     }
 }
-
-

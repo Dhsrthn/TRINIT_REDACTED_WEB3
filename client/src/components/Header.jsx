@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import NotificationPage from "./notif";
+import { getAccount } from "../utils/utils";
 const Header = () => {
   const navigate = useNavigate();
   return (
@@ -25,8 +26,9 @@ const Header = () => {
           FEED
         </span>
         <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#ffe3b7]/[0.47] to-[#ffe3b7] hover:text-white hover:cursor-pointer"
-        onClick={() => {
-          navigate("/profile");
+        onClick={async () => {
+          const account= await getAccount();
+          navigate("/profile/"+account);
         }}>
           PROFILE
         </span>
