@@ -1,12 +1,17 @@
 import { useState } from 'react';
-import { NFTStorage } from 'nft.storage';
-import styles from './style.module.css';
 import { uploadToFeed } from '../api/methods/methods';
+import { PinataSDK } from "pinata";
+
+const pinata = new PinataSDK({
+    pinataJwt: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mb3JtYXRpb24iOnsiaWQiOiIxNmY3NmQ0YS1lZWZhLTQ3OWYtOTAwNy1jODk3ZTAwNjVmZTgiLCJlbWFpbCI6ImFudmlhazAwQGdtYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJwaW5fcG9saWN5Ijp7InJlZ2lvbnMiOlt7ImRlc2lyZWRSZXBsaWNhdGlvbkNvdW50IjoxLCJpZCI6IkZSQTEifSx7ImRlc2lyZWRSZXBsaWNhdGlvbkNvdW50IjoxLCJpZCI6Ik5ZQzEifV0sInZlcnNpb24iOjF9LCJtZmFfZW5hYmxlZCI6ZmFsc2UsInN0YXR1cyI6IkFDVElWRSJ9LCJhdXRoZW50aWNhdGlvblR5cGUiOiJzY29wZWRLZXkiLCJzY29wZWRLZXlLZXkiOiJlZGYyN2Y0NTJiYzJiMDNhOTQ1MyIsInNjb3BlZEtleVNlY3JldCI6ImIzMjgwYjg2MDY0YTIxYjg5MzgxMTI5MmM4YjUzYjY3YTNlNjk2ZTE0OTZhMzhkY2ZhYTQzM2RmOTdhZTM4ZTciLCJleHAiOjE3OTM5NDM4NTJ9.eQSPNhDcY0xvfU8x0r0ks_ZnpOimiCsBwsFLJDbvqH8",
+    pinataGateway: "sapphire-biological-vole-164.mypinata.cloud"
+});
 
 const Upload = () => {
     const [file, setFile] = useState(null);
     const [name, setName] = useState('');
     const [desc, setDesc] = useState('');
+
     const handleUpload = () => {
         document.getElementById('upload').showModal();
     }
@@ -25,49 +30,41 @@ const Upload = () => {
                 console.error('No file selected');
                 return;
             }
+
             document.getElementById('kya').innerHTML = "UPLOADING...";
-            const ipfs = new NFTStorage({ token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweDUyZjczMUI4QjA2N0UzMzBhNTRiQ0QwNDFGYjQ0NjU0OTExOTI0MzMiLCJpc3MiOiJuZnQtc3RvcmFnZSIsImlhdCI6MTcwOTk2NDAyMTkyMywibmFtZSI6IlRyaW5pdCJ9.s-v-trfgaUFk9m1exEBgVs8JxKfX7nfe3Hhfk_DeiYg" });
 
-            const meta = await ipfs.store({
-                name,
-                description:desc,
-                image: file,
-            });
-
-            const metadataURL = `https://cloudflare-ipfs.com/ipfs/${meta.ipnft}/metadata.json`;
-
-            try {
-                const metadataResponse = await fetch(metadataURL);
-                
-                if (metadataResponse.ok) {
-                    const metadata = await metadataResponse.json();
-                    
-                    await uploadToFeed(`https://cloudflare-ipfs.com/ipfs/${metadata.image.split("ipfs://")[1]}`, metadata.name, metadata.description).then((res) => {
-                        console.log(res);
-                        document.getElementById('upload').close();
-                    });
-                    // console.log(metadata.image);
-
-                    // const imageUrl = `https://cloudflare-ipfs.com/ipfs/${metadata.image.split("ipfs://")[1]}`;
-
-                    // const imgElement = document.createElement("img");
-                    // imgElement.src = imageUrl;
-                    // imgElement.alt = "Uploaded image";
-                    // imgElement.style.width = '100px'
-                    // imgElement.style.height = '100px'
-
-                    // document.getElementById("mass").append(imgElement);
-                } else {
-                    console.error('Failed to fetch metadata. Status:', metadataResponse.status);
+            const urlResponse = await fetch('http://localhost:8787/presigned_url', {
+                method: "GET",
+                headers: {
                 }
-            } catch (error) {
-                console.error('Error fetching metadata:', error);
+            });
+            const data = await urlResponse.json();
+
+            const upload = await pinata.upload.public
+                .file(file)
+                .url(data.url);
+
+            if (upload.cid) {
+                const imageUrl = await pinata.gateways.public.convert(upload.cid);
+
+                await uploadToFeed(imageUrl, name, desc).then((res) => {
+                    console.log(res);
+                    document.getElementById('kya').innerHTML = "SUBMIT";
+                    document.getElementById('upload').close();
+
+                    setFile(null);
+                    setName('');
+                    setDesc('');
+                });
+            } else {
+                console.error('Upload failed');
+                document.getElementById('kya').innerHTML = "SUBMIT";
             }
         } catch (error) {
-            console.error(error);
+            console.error('Error uploading file:', error);
+            document.getElementById('kya').innerHTML = "SUBMIT";
         }
     };
-
     return (
         <>
             <dialog id='upload' className="overflow-hidden rounded-2 z-10">
